@@ -48,7 +48,7 @@ class LoginView {
 	*/
 	private function generateLoginFormHTML($message) {
 		return '
-			<form method="post" > 
+			<form action="controller/LoginController.php" method="post" >
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
 					<p id="' . self::$messageId . '">' . $message . '</p>
@@ -70,6 +70,12 @@ class LoginView {
 	
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
 	private function getRequestUserName() {
+		if(isset($_GET[self::$name])){
+
+		}
+
+
+		return $userName;
 		//RETURN REQUEST VARIABLE: USERNAME
 	}
 	
