@@ -23,7 +23,7 @@ class DateTime
     public function __construct(){
         $this->day = date("l");
         $this->date = date("d");
-        $this->month = date("m");
+        $this->month = date("F");
         $this->year = date("Y");
         $this->time = date("h:i:s");
     }
@@ -37,6 +37,7 @@ class DateTime
     }
 
     public function getMonth(){
+
         return $this->month;
     }
 
