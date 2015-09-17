@@ -27,7 +27,9 @@ class LoginController
            $username = $this->view->getUserName();
            $password = $this->view->getPassword();
 
-           $this->model->authenticateUser($username, $password);
+           $response = $this->model->authenticateUser($username, $password);
+
+           var_dump($response);
 
        }else{
 

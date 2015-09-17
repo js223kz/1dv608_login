@@ -27,6 +27,10 @@ class User
         return $this->passWord;
     }
 
+    public function authenticateUser(){
+        return "function running";
+    }
+
 
 
 }
