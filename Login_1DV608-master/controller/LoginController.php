@@ -6,8 +6,8 @@
  * Time: 11:44
  */
 
-namespace controller;
 
+namespace controller;
 
 class LoginController
 {

@@ -7,6 +7,7 @@ require_once('view/LayoutView.php');
 require_once('model/User.php');
 require_once('model/UserDataBase.php');
 
+
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
@@ -23,4 +24,7 @@ $lv = new LayoutView();
 
 
 $lv->render(false, $v, $dtv);
+
+$name = $v->getUserName();
+
 

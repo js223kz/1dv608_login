@@ -2,6 +2,7 @@
 require_once('model/DateTime.php');
 class DateTimeView {
 	private $model;
+
 	public function show() {
 		$model = new \model\DateTime();
 		$timeString = $model->getDay() . ", the " .
