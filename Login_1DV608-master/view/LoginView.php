@@ -12,7 +12,7 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
-
+	private $username = "";
 	/**
 	 * Create HTTP response
 	 *
@@ -22,10 +22,31 @@ class LoginView {
 	 */
 	public function response() {
 		$message = '';
-		
+		if(isset($_POST[self::$name]) && trim($_POST[self::$name]) == '')
+		{
+			$message = 'Username is missing';
+			$this->authenticateUser = false;
+		}
+		if(isset($_POST[self::$name]) && trim($_POST[self::$name]) != '' && isset($_POST[self::$password]) && trim($_POST[self::$password]) == '')
+		{
+			$this->username = $_POST[self::$name];
+			$message = 'Password is missing';
+			$this->authenticateUser = false;
+		}
+		if(isset($_POST[self::$password]) && trim($_POST[self::$password]) != '' && isset($_POST[self::$name]) && trim($_POST[self::$name]) == '')
+		{
+			$this->username = $_POST[self::$name];
+			$message = 'Username is missing';
+			$this->authenticateUser = false;
+		}
+
 		$response = $this->generateLoginFormHTML($message);
 		//$response .= $this->generateLogoutButtonHTML($message);
 		return $response;
+	}
+
+	public function getAuthenticateUser(){
+	return $this->authenticateUser;
 	}
 
 	/**
@@ -56,7 +77,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '"/>
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->username . '"/>
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
 					<label for="' . self::$keep . '">Keep me logged in  :</label>
@@ -75,24 +96,30 @@ class LoginView {
 
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
 	private function getRequestUserName() {
-
+		if(isset($_POST[self::$name]) && trim($_POST[self::$name]) != '')
+		{
+			return $_POST[self::$name];
+		}
 
 		//RETURN REQUEST VARIABLE: USERNAME
 	}
 
-	public function getUserName(){
-		if(isset($_POST[self::$name]) && trim($_POST[self::$name]) == '')
-		{
-			var_dump("Användarnamn saknas!");
-		}
-		if (isset($_POST[self::$name])){
-			$userName = $_POST[self::$name];
-			return $userName;
-		}
+	public function startAuthenticateUser(){
+		if(isset($_POST[self::$password]) && trim($_POST[self::$password]) != '' && isset($_POST[self::$name]) && trim($_POST[self::$name]) != '') {
 
+			return true;
+		}else{
+			return false;
+		}
 
 	}
 
+	public function getUserName(){
+		 return $_POST[self::$name];
+	}
+	public function getPassword(){
+		return $_POST[self::$password];
+	}
 
 
 }

@@ -6,6 +6,7 @@ require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 require_once('model/User.php');
 require_once('model/UserDataBase.php');
+require_once('controller/LoginController.php');
 
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
@@ -22,9 +23,10 @@ $v = new LoginView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
 
+$loginController = new \controller\LoginController($v, $user);
+$loginController->authenticateUser();
 
 $lv->render(false, $v, $dtv);
 
-$name = $v->getUserName();
 
 

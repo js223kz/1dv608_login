@@ -8,8 +8,31 @@
 
 
 namespace controller;
+require_once('view/LoginView.php');
+require_once('model/User.php');
 
 class LoginController
 {
+    private $view;
+    private $model;
+
+    public function __construct(\LoginView $view, \model\User $model){
+        $this->view = $view;
+        $this->model = $model;
+    }
+
+    public function authenticateUser(){
+        $startAuthentication = $this->view->startAuthenticateUser();
+       if($startAuthentication==true){
+           $username = $this->view->getUserName();
+           $password = $this->view->getPassword();
+
+           $this->model->authenticateUser($username, $password);
+
+       }else{
+
+       }
+
+    }
 
 }
