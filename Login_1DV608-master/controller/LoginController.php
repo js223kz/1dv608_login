@@ -10,31 +10,27 @@
 namespace controller;
 require_once('view/LoginView.php');
 require_once('model/User.php');
+require_once('model/UserDataBase.php');
 
 class LoginController
 {
     private $view;
-    private $model;
+    private $userModel;
+    private $userDBModel;
 
-    public function __construct(\LoginView $view, \model\User $model){
+    public function __construct(\LoginView $view, \model\UserDataBase $userDB){
         $this->view = $view;
-        $this->model = $model;
+        $this->userDBModel = $userDB;
+
     }
 
     public function authenticateUser(){
-        $startAuthentication = $this->view->startAuthenticateUser();
-       if($startAuthentication==true){
-           $username = $this->view->getUserName();
-           $password = $this->view->getPassword();
+        if($this->view->userWantsToLogin() == true){
 
-           $response = $this->model->authenticateUser($username, $password);
-
-           var_dump($response);
-
-       }else{
-
-       }
-
+            $username = $this->view->getUserName();
+            $password = $this->view->getPassword();
+            $this->userModel =  new \model\User($username, $password);
+            $this->view->setMessage($this->userModel->authenticateUser($this->userDBModel));
+        }
     }
-
 }

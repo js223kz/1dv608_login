@@ -13,6 +13,7 @@ class User
 {
     private $userName;
     private $passWord;
+    private $userDataBaseModel;
 
     public function __construct($userName, $passWord){
         $this->userName = $userName;
@@ -27,8 +28,13 @@ class User
         return $this->passWord;
     }
 
-    public function authenticateUser(){
-        return "function running";
+    public function authenticateUser(UserDataBase $userDB){
+        $this->userDataBaseModel = $userDB;
+        if (array_key_exists($this->userName, $this->userDataBaseModel->getUsers())) {
+            return "Username exists";
+        }else{
+            return "Username does not exists";
+        }
     }
 
 

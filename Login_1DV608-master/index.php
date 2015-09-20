@@ -23,7 +23,7 @@ $v = new LoginView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
 
-$loginController = new \controller\LoginController($v, $user);
+$loginController = new \controller\LoginController($v, $userDB);
 $loginController->authenticateUser();
 
 $lv->render(false, $v, $dtv);
