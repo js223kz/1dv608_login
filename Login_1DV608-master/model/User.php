@@ -14,6 +14,7 @@ class User
     private $userName;
     private $passWord;
     private $userDataBaseModel;
+    private $isUserAuthenticated = false;
 
     public function __construct($userName, $passWord){
         $this->userName = $userName;
@@ -30,12 +31,29 @@ class User
 
     public function authenticateUser(UserDataBase $userDB){
         $this->userDataBaseModel = $userDB;
-        if (array_key_exists($this->userName, $this->userDataBaseModel->getUsers())) {
-            return "Username exists";
+        $users = $this->userDataBaseModel->getUsers();
+
+        if (array_key_exists($this->userName, $users)) {
+
+            if($users[$this->userName] === $this->passWord){
+                $this->isUserAuthenticated = true;
+                return "Welcome";
+            }else{
+                $this->isUserAuthenticated = false;
+                return "Wrong name or password";
+            }
         }else{
-            return "Username does not exists";
+            $this->isUserAuthenticated = false;
+            return "Wrong name or password";
         }
+
     }
+
+    public function getIsUserLoggedIn(){
+        return $this->isUserAuthenticated;
+    }
+
+
 
 
 

@@ -26,7 +26,7 @@ $lv = new LayoutView();
 $loginController = new \controller\LoginController($v, $userDB);
 $loginController->authenticateUser();
 
-$lv->render(false, $v, $dtv);
+$lv->render($loginController->isUserLoggedIn(), $v, $dtv);
 
 
 

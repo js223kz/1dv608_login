@@ -24,12 +24,11 @@ class UserDataBase
         }
 
         $key = $user->getUserName();
-        $this->users[$key] = $user;
+        $this->users[$key] = $user->getPassword();
 
     }
 
     public function getUsers(){
-        var_dump($this->users);
         return $this->users;
     }
 }

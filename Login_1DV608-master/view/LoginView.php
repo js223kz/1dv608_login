@@ -21,7 +21,8 @@ class LoginView {
 	 *
 	 * @return  void BUT writes to standard output and cookies!
 	 */
-	public function response() {
+	public function response($isUserLoggedIn) {
+		$response="";
 
 		if(isset($_POST[self::$login]) && trim($_POST[self::$name]) == '' && trim($_POST[self::$name]) == '')
 		{
@@ -36,9 +37,11 @@ class LoginView {
 		{
 			$this->setMessage('Username is missing');
 		}
-
-		$response = $this->generateLoginFormHTML($this->getMessage());
-		//$response .= $this->generateLogoutButtonHTML($message);
+		if($isUserLoggedIn==false){
+			$response = $this->generateLoginFormHTML();
+		}else{
+			$response .= $this->generateLogoutButtonHTML();
+		}
 		return $response;
 	}
 
@@ -47,10 +50,10 @@ class LoginView {
 	* @param $message, String output message
 	* @return  void, BUT writes to standard output!
 	*/
-	private function generateLogoutButtonHTML($message) {
+	private function generateLogoutButtonHTML() {
 		return '
 			<form  method="post" >
-				<p id="' . self::$messageId . '">' . $message .'</p>
+				<p id="' . self::$messageId . '">' . $this->getMessage() .'</p>
 				<input type="submit" name="' . self::$logout . '" value="logout"/>
 			</form>
 		';
@@ -61,13 +64,13 @@ class LoginView {
 	* @param $message, String output message
 	* @return  void, BUT writes to standard output!
 	*/
-	private function generateLoginFormHTML($message) {
+	private function generateLoginFormHTML() {
 
 		return '
 			<form method="post" action="" >
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
-					<p id="' . self::$messageId . '">' . $message . '</p>
+					<p id="' . self::$messageId . '">' . $this->getMessage() . '</p>
 
 					<label for="' . self::$name . '">Username :</label>
 					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->username . '"/>
@@ -105,6 +108,7 @@ class LoginView {
 
 	public function userWantsToLogin(){
 		if(isset($_POST[self::$login]) && trim($_POST[self::$password]) != '' && trim($_POST[self::$name]) != '') {
+			$this->username = $_POST[self::$name];
 			return true;
 		}else{
 			return false;

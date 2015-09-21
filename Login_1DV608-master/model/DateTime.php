@@ -16,7 +16,6 @@ class DateTime
     private $month;
     private $year;
     private $time;
-
     /**
      *
      */
