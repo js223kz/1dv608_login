@@ -12,6 +12,7 @@ class LoginView {
 	private static $messageId = 'LoginView::Message';
 	private $username = "";
 	private $message = "";
+	private $sessionLocation = "userName";
 
 
 	/**
@@ -107,6 +108,7 @@ class LoginView {
 	}
 
 	public function userWantsToLogin(){
+
 		if(isset($_POST[self::$login]) && trim($_POST[self::$password]) != '' && trim($_POST[self::$name]) != '') {
 			$this->username = $_POST[self::$name];
 			return true;
@@ -115,13 +117,46 @@ class LoginView {
 		}
 	}
 
+	public function setSession()
+	{
+		if(isset($_POST[self::$keep])) {
+
+			$_SESSION[$this->sessionLocation] = $this->getUserName();
+		}
+
+	}
+
+	public function unSetSession()
+	{
+		if(isset($_SESSION[$this->sessionLocation])) {
+			session_destroy();
+			unset($_SESSION[$this->sessionLocation]);
+		}
+
+	}
+
+	public function isSessionActive(){
+		if(isset($_SESSION[$this->sessionLocation])){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function logout(){
+		var_dump("Pressing logout button");
+		if(isset($_POST[self::$logout])){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
 	private function getRequestUserName() {
-		if(isset($_POST[self::$name]) && trim($_POST[self::$name]) != '')
-		{
+
 			return $_POST[self::$name];
-		}
+
 
 		//RETURN REQUEST VARIABLE: USERNAME
 	}

@@ -8,6 +8,7 @@ require_once('model/User.php');
 require_once('model/UserDataBase.php');
 require_once('controller/LoginController.php');
 
+session_start();
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
 error_reporting(E_ALL);
@@ -24,6 +25,7 @@ $dtv = new DateTimeView();
 $lv = new LayoutView();
 
 $loginController = new \controller\LoginController($v, $userDB);
+
 $loginController->authenticateUser();
 
 $lv->render($loginController->isUserLoggedIn(), $v, $dtv);

@@ -22,25 +22,35 @@ class LoginController
     public function __construct(\LoginView $view, \model\UserDataBase $userDB){
         $this->view = $view;
         $this->userDBModel = $userDB;
-        $this->userIsLoggedIn = false;
+        //$this->view->unSetSession();
 
     }
 
     public function authenticateUser(){
-        if($this->view->userWantsToLogin() == true){
-
+        if($this->view->isSessionActive() == true){
+            $this->userIsLoggedIn = true;
+        }else if($this->view->userWantsToLogin() == true){
             $username = $this->view->getUserName();
             $password = $this->view->getPassword();
             $this->userModel =  new \model\User($username, $password);
             $this->view->setMessage($this->userModel->authenticateUser($this->userDBModel));
 
             if($this->userModel->getIsUserLoggedIn() == true){
+
+                $this->view->setSession();
                 $this->userIsLoggedIn = true;
             }
+
+        }else if($this->view->logout() == true){
+            var_dump("inne i logout");
+            $this->view->unSetSession();
+            $this->userIsLoggedIn = false;
+        }else{
+            $this->userIsLoggedIn = false;
         }
     }
 
     public function isUserLoggedIn(){
-        return $this->userIsLoggedIn;
+       return $this->userIsLoggedIn;
     }
 }
