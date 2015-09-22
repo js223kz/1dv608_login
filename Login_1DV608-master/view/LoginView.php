@@ -74,7 +74,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $this->getMessage() . '</p>
 
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->username . '"/>
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->getUserName() . '"/>
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
 					<label for="' . self::$keep . '">Keep me logged in  :</label>
@@ -97,8 +97,13 @@ class LoginView {
 		return $this->message;
 	}
 
+	public function setUserName(){
+
+			$this->username = $_POST[self::$name];
+	}
+
 	public function getUserName(){
-		 return $_POST[self::$name];
+		 return $this->username;
 	}
 
 	public function getPassword(){
@@ -117,10 +122,8 @@ class LoginView {
 
 	public function setSession()
 	{
-		if(isset($_POST[self::$keep])) {
+		$_SESSION[$this->sessionLocation] = $this->getUserName();
 
-			$_SESSION[$this->sessionLocation] = $this->getUserName();
-		}
 	}
 
 	public function unSetSession()

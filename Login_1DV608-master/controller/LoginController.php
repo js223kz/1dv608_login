@@ -29,9 +29,10 @@ class LoginController
         if($this->view->isSessionActive() == true){
             $this->userIsLoggedIn = true;
         }
-        if($this->view->userWantsToLogin() == true){
+        if($this->view->userWantsToLogin() == true && $this->userIsLoggedIn == false){
             $username = $this->view->getUserName();
             $password = $this->view->getPassword();
+
             $this->userModel =  new \model\User($username, $password);
             $this->view->setMessage($this->userModel->authenticateUser($this->userDBModel));
 
