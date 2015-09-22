@@ -23,13 +23,13 @@ class LoginController
         $this->view = $view;
         $this->userDBModel = $userDB;
         //$this->view->unSetSession();
-
     }
 
     public function authenticateUser(){
         if($this->view->isSessionActive() == true){
             $this->userIsLoggedIn = true;
-        }else if($this->view->userWantsToLogin() == true){
+        }
+        if($this->view->userWantsToLogin() == true){
             $username = $this->view->getUserName();
             $password = $this->view->getPassword();
             $this->userModel =  new \model\User($username, $password);
@@ -41,16 +41,23 @@ class LoginController
                 $this->userIsLoggedIn = true;
             }
 
-        }else if($this->view->logout() == true){
-            var_dump("inne i logout");
+        }
+        if($this->view->logout() == true && $this->userIsLoggedIn == true){
+            $this->userIsLoggedIn = false;
             $this->view->unSetSession();
-            $this->userIsLoggedIn = false;
-        }else{
-            $this->userIsLoggedIn = false;
+            $this->view->setMessage("Bye bye!");
         }
     }
 
     public function isUserLoggedIn(){
        return $this->userIsLoggedIn;
+    }
+
+    public function renderLoginView(){
+        if($this->userIsLoggedIn == true){
+            return $this->view->response();
+        }else{
+            return $this->view->generateLogoutButtonHTML();
+        }
     }
 }

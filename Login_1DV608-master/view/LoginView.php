@@ -39,9 +39,9 @@ class LoginView {
 			$this->setMessage('Username is missing');
 		}
 		if($isUserLoggedIn==false){
-			$response = $this->generateLoginFormHTML();
+			$response = $this->generateLoginFormHTML($this->getMessage());
 		}else{
-			$response .= $this->generateLogoutButtonHTML();
+			$response .= $this->generateLogoutButtonHTML($this->getMessage());
 		}
 		return $response;
 	}
@@ -51,10 +51,10 @@ class LoginView {
 	* @param $message, String output message
 	* @return  void, BUT writes to standard output!
 	*/
-	private function generateLogoutButtonHTML() {
+	public function generateLogoutButtonHTML($message) {
 		return '
 			<form  method="post" >
-				<p id="' . self::$messageId . '">' . $this->getMessage() .'</p>
+				<p id="' . self::$messageId . '">' . $message .'</p>
 				<input type="submit" name="' . self::$logout . '" value="logout"/>
 			</form>
 		';
@@ -89,20 +89,18 @@ class LoginView {
 
 	}
 
-
-
-
 	public function setMessage($message){
 		$this->message = $message;
 	}
+
 	public function getMessage(){
 		return $this->message;
 	}
 
-
 	public function getUserName(){
 		 return $_POST[self::$name];
 	}
+
 	public function getPassword(){
 		return $_POST[self::$password];
 	}
@@ -123,7 +121,6 @@ class LoginView {
 
 			$_SESSION[$this->sessionLocation] = $this->getUserName();
 		}
-
 	}
 
 	public function unSetSession()
@@ -132,7 +129,6 @@ class LoginView {
 			session_destroy();
 			unset($_SESSION[$this->sessionLocation]);
 		}
-
 	}
 
 	public function isSessionActive(){
@@ -144,20 +140,10 @@ class LoginView {
 	}
 
 	public function logout(){
-		var_dump("Pressing logout button");
 		if(isset($_POST[self::$logout])){
 			return true;
 		}else{
 			return false;
 		}
-	}
-
-	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
-	private function getRequestUserName() {
-
-			return $_POST[self::$name];
-
-
-		//RETURN REQUEST VARIABLE: USERNAME
 	}
 }
