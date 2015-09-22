@@ -16,6 +16,7 @@ ini_set('display_errors', 'On');
 //CREATE NEW USER OBJECT
 $user = new \model\User("Admin", "Password");
 
+
 //ADDING USER OBJECT TO FAKE "DATABASE"
 $userDB = new \model\UserDataBase();
 $userDB->addUserToDatabase($user);

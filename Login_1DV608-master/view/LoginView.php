@@ -54,7 +54,7 @@ class LoginView {
 
 		return '
 			<h2>Not logged in</h2>
-			<form method="post" >
+			<form method="POST">
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
 					<p id="' . self::$messageId . '">' . $this->getMessage() . '</p>
@@ -110,7 +110,7 @@ class LoginView {
 		$_SESSION[$this->sessionLocation] = $this->getUserName();
 	}
 
-	public function unSetSession()
+	public function destroySession()
 	{
 		if(isset($_SESSION[$this->sessionLocation])) {
 			session_destroy();

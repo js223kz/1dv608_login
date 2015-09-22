@@ -16,9 +16,12 @@ class User
     private $loggedIn = false;
 
     public function __construct($userName, $passWord){
-        //lägg en koll på inmatning så det inte är fuffens
-        $this->userName = $userName;
-        $this->passWord = $passWord;
+        if(empty($userName) || empty($passWord)){
+            throw new \Exception("Username/password can´ be empty");
+        }else{
+            $this->userName = $userName;
+            $this->passWord = $passWord;
+        }
     }
 
     public function getUserName(){

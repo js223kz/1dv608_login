@@ -45,7 +45,7 @@ class LoginController
         }
         if($this->view->logout() == true && $this->loggedIn == true){
             $this->loggedIn = false;
-            $this->view->unSetSession();
+            $this->view->destroySession();
             $this->view->setMessage("Bye bye!");
         }
     }
