@@ -1,4 +1,6 @@
 <?php
+namespace view;
+
 
 class LoginView {
 
@@ -14,16 +16,27 @@ class LoginView {
 	private $message = "";
 	private $sessionLocation = "userName";
 
+	/**
+	* Generate HTML code on the output buffer for the logout button
+	* @param $message, String output message
+	* @return  void, BUT writes to standard output!
+	*/
+	public function renderLogoutHTML() {
+		return '
+			<h2>Logged in</h2>
+			<form  method="post" >
+				<p id="' . self::$messageId . '">' . $this->getMessage() .'</p>
+				<input type="submit" name="' . self::$logout . '" value="logout"/>
+			</form>
+		';
+	}
 
 	/**
-	 * Create HTTP response
-	 *
-	 * Should be called after a login attempt has been determined
-	 *
-	 * @return  void BUT writes to standard output and cookies!
-	 */
-	public function response($isUserLoggedIn) {
-		$response="";
+	* Generate HTML code on the output buffer for the logout button
+	* checking user input and sets appropriate messages if one or both fields is missing values
+	* @return  void, BUT writes to standard output!
+	*/
+	public function generateLoginFormHTML() {
 
 		if(isset($_POST[self::$login]) && trim($_POST[self::$name]) == '' && trim($_POST[self::$name]) == '')
 		{
@@ -38,37 +51,10 @@ class LoginView {
 		{
 			$this->setMessage('Username is missing');
 		}
-		if($isUserLoggedIn==false){
-			$response = $this->generateLoginFormHTML($this->getMessage());
-		}else{
-			$response .= $this->generateLogoutButtonHTML($this->getMessage());
-		}
-		return $response;
-	}
-
-	/**
-	* Generate HTML code on the output buffer for the logout button
-	* @param $message, String output message
-	* @return  void, BUT writes to standard output!
-	*/
-	public function generateLogoutButtonHTML($message) {
-		return '
-			<form  method="post" >
-				<p id="' . self::$messageId . '">' . $message .'</p>
-				<input type="submit" name="' . self::$logout . '" value="logout"/>
-			</form>
-		';
-	}
-
-	/**
-	* Generate HTML code on the output buffer for the logout button
-	* @param $message, String output message
-	* @return  void, BUT writes to standard output!
-	*/
-	private function generateLoginFormHTML() {
 
 		return '
-			<form method="post" action="" >
+			<h2>Not logged in</h2>
+			<form method="post" >
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
 					<p id="' . self::$messageId . '">' . $this->getMessage() . '</p>
@@ -98,8 +84,7 @@ class LoginView {
 	}
 
 	public function setUserName(){
-
-			$this->username = $_POST[self::$name];
+		$this->username = $_POST[self::$name];
 	}
 
 	public function getUserName(){
@@ -123,7 +108,6 @@ class LoginView {
 	public function setSession()
 	{
 		$_SESSION[$this->sessionLocation] = $this->getUserName();
-
 	}
 
 	public function unSetSession()

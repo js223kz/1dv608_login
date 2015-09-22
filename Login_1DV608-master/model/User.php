@@ -13,10 +13,10 @@ class User
 {
     private $userName;
     private $passWord;
-    private $userDataBaseModel;
-    private $isUserAuthenticated = false;
+    private $loggedIn = false;
 
     public function __construct($userName, $passWord){
+        //lägg en koll på inmatning så det inte är fuffens
         $this->userName = $userName;
         $this->passWord = $passWord;
     }
@@ -30,31 +30,25 @@ class User
     }
 
     public function authenticateUser(UserDataBase $userDB){
-        $this->userDataBaseModel = $userDB;
-        $users = $this->userDataBaseModel->getUsers();
+        $users = $userDB->getUsers();
 
         if (array_key_exists($this->userName, $users)) {
 
             if($users[$this->userName] === $this->passWord){
-                $this->isUserAuthenticated = true;
+                $this->loggedIn = true;
                 return "Welcome";
             }else{
-                $this->isUserAuthenticated = false;
+                $this->loggedIn = false;
                 return "Wrong name or password";
             }
         }else{
-            $this->isUserAuthenticated = false;
+            $this->loggedIn = false;
             return "Wrong name or password";
         }
 
     }
 
-    public function getIsUserLoggedIn(){
-        return $this->isUserAuthenticated;
+    public function isUserLoggedIn(){
+        return $this->loggedIn;
     }
-
-
-
-
-
 }

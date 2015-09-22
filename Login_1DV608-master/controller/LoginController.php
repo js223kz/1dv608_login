@@ -17,48 +17,44 @@ class LoginController
     private $view;
     private $userModel;
     private $userDBModel;
-    private $userIsLoggedIn;
+    private $loggedIn;
 
-    public function __construct(\LoginView $view, \model\UserDataBase $userDB){
-        $this->view = $view;
+    public function __construct(\model\UserDataBase $userDB){
+
+        $this->view = new \view\LoginView();
         $this->userDBModel = $userDB;
-        //$this->view->unSetSession();
     }
 
     public function authenticateUser(){
         if($this->view->isSessionActive() == true){
-            $this->userIsLoggedIn = true;
+            $this->loggedIn = true;
         }
-        if($this->view->userWantsToLogin() == true && $this->userIsLoggedIn == false){
+        if($this->view->userWantsToLogin() == true && $this->loggedIn == false){
             $username = $this->view->getUserName();
             $password = $this->view->getPassword();
 
             $this->userModel =  new \model\User($username, $password);
             $this->view->setMessage($this->userModel->authenticateUser($this->userDBModel));
 
-            if($this->userModel->getIsUserLoggedIn() == true){
+            if($this->userModel->isUserLoggedIn() == true){
 
                 $this->view->setSession();
-                $this->userIsLoggedIn = true;
+                $this->loggedIn = true;
             }
 
         }
-        if($this->view->logout() == true && $this->userIsLoggedIn == true){
-            $this->userIsLoggedIn = false;
+        if($this->view->logout() == true && $this->loggedIn == true){
+            $this->loggedIn = false;
             $this->view->unSetSession();
             $this->view->setMessage("Bye bye!");
         }
     }
-
-    public function isUserLoggedIn(){
-       return $this->userIsLoggedIn;
-    }
-
-    public function renderLoginView(){
-        if($this->userIsLoggedIn == true){
-            return $this->view->response();
+    public function renderBodyHTML(){
+        if($this->loggedIn != true){
+            return $this->view->generateLoginFormHTML();
         }else{
-            return $this->view->generateLogoutButtonHTML();
+            return $this->view->renderLogoutHTML();
         }
     }
+
 }

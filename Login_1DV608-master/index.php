@@ -1,7 +1,6 @@
 <?php
 
 //INCLUDE THE FILES NEEDED...
-require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 require_once('model/User.php');
@@ -16,19 +15,21 @@ ini_set('display_errors', 'On');
 
 //CREATE NEW USER OBJECT
 $user = new \model\User("Admin", "Password");
+
+//ADDING USER OBJECT TO FAKE "DATABASE"
 $userDB = new \model\UserDataBase();
 $userDB->addUserToDatabase($user);
 
 //CREATE OBJECTS OF THE VIEWS
-$v = new LoginView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
 
-$loginController = new \controller\LoginController($v, $userDB);
+$loginController = new \controller\LoginController($userDB);
 
 $loginController->authenticateUser();
+$htmlBody = $loginController->renderBodyHTML();
 
-$lv->render($loginController->isUserLoggedIn(), $v, $dtv);
+$lv->render($htmlBody, $dtv);
 
 
 
