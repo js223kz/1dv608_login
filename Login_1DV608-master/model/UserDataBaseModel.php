@@ -88,10 +88,10 @@ class UserDataBaseModel
                 $this->setUserLoggedInSession();
                 $this->setMessageSession("Welcome");
             }else{
-                $this->setMessageSession("Wrong username or password");
+                $this->setMessageSession("Wrong name or password");
             }
         }else{
-            $this->setMessageSession("Wrong username or password");
+            $this->setMessageSession("Wrong name or password");
         }
     }
 
