@@ -49,7 +49,7 @@ class LoginView {
 			$this->setMessage($this->userDBModel->getMessageSession());
 			$this->userDBModel->destroyMessageSession();
 		}
-		if($loggedIn==false){
+		if($loggedIn == false){
 			$html = $this->renderLoginHTML();
 		}else{
 			$html = $this->renderLogoutHTML();

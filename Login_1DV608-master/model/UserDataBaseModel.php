@@ -13,7 +13,6 @@ class UserDataBaseModel
 {
     private $users = array();
     private $userLoggedInSession = "loggedIn";
-    private $isUserLoggedIn = false;
     private $messageSession = "message";
 
     public function addUserToDatabase(\model\User $user){
@@ -69,9 +68,7 @@ class UserDataBaseModel
 
     public function destroyMessageSession()
     {
-        if(isset($_SESSION[$this->messageSession])) {
-            unset($_SESSION[$this->messageSession]);
-        }
+        unset($_SESSION[$this->messageSession]);
     }
     /**
     * Checks username and password against "userdatabase"
