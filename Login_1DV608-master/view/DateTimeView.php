@@ -1,20 +1,16 @@
 <?php
 
+namespace view;
+require_once('model/DateTimeModel.php');
+
 class DateTimeView {
 
-	public function show() {
-		date_default_timezone_set("Europe/Stockholm");
-		$today = new DateTime();
+	public function renderDateTimeString() {
+		$dateTimeModel = new \model\DateTimeModel();
 
-		$day = $today->format('l');
-		$date = $today->format('jS');
-		$month = $today->format('F');
-		$year = $today->format('Y');
-		$time = $today->format("H:i:s");
-
-		$timeString = $day . ", the " .
-			$date . " of " . $month . " "
-			. $year . ", The time is " . $time;
+		$timeString = $dateTimeModel->getDay() . ", the " .
+			$dateTimeModel->getDate() . " of " . $dateTimeModel->getMonth() . " "
+			. $dateTimeModel->getYear() . ", The time is " . $dateTimeModel->getTime();
 
 		return '<p>' . $timeString . '</p>';
 	}

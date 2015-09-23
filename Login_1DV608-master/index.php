@@ -1,10 +1,8 @@
 <?php
 
 //INCLUDE THE FILES NEEDED...
-require_once('view/DateTimeView.php');
-require_once('view/LayoutView.php');
 require_once('model/User.php');
-require_once('model/UserDataBase.php');
+require_once('model/UserDataBaseModel.php');
 require_once('controller/LoginController.php');
 
 session_start();
@@ -13,24 +11,22 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-//CREATE NEW USER OBJECT
-$user = new \model\User("Admin", "Password");
+//CREATE NEW USERDATABASE FAKE OBJECT
+$userDB = new \model\UserDataBaseModel();
 
+//CREATE NEW USER OBJECT AND ADD IT TO FAKE DATABASE
+try {
+    $user = new \model\User("Admin", "Password");
+    $userDB->addUserToDatabase($user);
 
-//ADDING USER OBJECT TO FAKE "DATABASE"
-$userDB = new \model\UserDataBase();
-$userDB->addUserToDatabase($user);
-
-//CREATE OBJECTS OF THE VIEWS
-$dtv = new DateTimeView();
-$lv = new LayoutView();
+} catch (Exception $e) {
+    echo $e->getMessage() ."\n";
+}
 
 $loginController = new \controller\LoginController($userDB);
 
 $loginController->authenticateUser();
-$htmlBody = $loginController->renderBodyHTML();
-
-$lv->render($htmlBody, $dtv);
+$loginController->echoHTML();
 
 
 

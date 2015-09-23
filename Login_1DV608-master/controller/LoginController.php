@@ -9,52 +9,46 @@
 
 namespace controller;
 require_once('view/LoginView.php');
-require_once('model/User.php');
-require_once('model/UserDataBase.php');
+require_once('view/DateTimeView.php');
+require_once('view/LayoutView.php');
+require_once('model/UserDataBaseModel.php');
 
 class LoginController
 {
-    private $view;
-    private $userModel;
+    private $loginView;
+    private $layoutView;
+    private $dateTimeView;
     private $userDBModel;
-    private $loggedIn;
 
-    public function __construct(\model\UserDataBase $userDB){
+    public function __construct(\model\UserDataBaseModel $userDB){
 
-        $this->view = new \view\LoginView();
+        $this->loginView = new \view\LoginView($userDB);
+        $this->layoutView = new \view\LayoutView();
+        $this->dateTimeView = new \view\DateTimeView();
         $this->userDBModel = $userDB;
     }
 
     public function authenticateUser(){
-        if($this->view->isSessionActive() == true){
-            $this->loggedIn = true;
-        }
-        if($this->view->userWantsToLogin() == true && $this->loggedIn == false){
-            $username = $this->view->getUserName();
-            $password = $this->view->getPassword();
 
-            $this->userModel =  new \model\User($username, $password);
-            $this->view->setMessage($this->userModel->authenticateUser($this->userDBModel));
+        if($this->loginView->userWantsToLogin() && !$this->userDBModel->isLoggedIn()){
+            $username = $this->loginView->getUserName();
+            $password = $this->loginView->getPassword();
 
-            if($this->userModel->isUserLoggedIn() == true){
+            try {
+                $this->userDBModel->checkUserCredentials($username, $password);
 
-                $this->view->setSession();
-                $this->loggedIn = true;
+            } catch (Exception $e) {
+                $this->loginView->setMessage($e->getMessage());
             }
-
         }
-        if($this->view->logout() == true && $this->loggedIn == true){
-            $this->loggedIn = false;
-            $this->view->destroySession();
-            $this->view->setMessage("Bye bye!");
-        }
+      if($this->loginView->logout() && $this->userDBModel->isLoggedIn()){
+          $this->loginView->setMessage("Bye bye!");
+          $this->userDBModel->unsetUserLoggedInSession();
+       }
     }
-    public function renderBodyHTML(){
-        if($this->loggedIn != true){
-            return $this->view->generateLoginFormHTML();
-        }else{
-            return $this->view->renderLogoutHTML();
-        }
-    }
+    public function echoHTML(){
+        $loginViewHTML = $this->loginView->renderLoginLogout($this->userDBModel->isLoggedIn());
 
+        $this->layoutView->render($loginViewHTML, $this->dateTimeView);
+    }
 }

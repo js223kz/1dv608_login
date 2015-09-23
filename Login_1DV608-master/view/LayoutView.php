@@ -1,9 +1,9 @@
 <?php
 
-
+namespace view;
 class LayoutView {
   
-  public function render($htmlBody, DateTimeView $dtv) {
+  public function render($loginViewHTML, DateTimeView $dateTimeView) {
     echo '<!DOCTYPE html>
       <html>
         <head>
@@ -14,9 +14,9 @@ class LayoutView {
           <h1>Assignment 2</h1>
 
           <div class="container">
-              ' . $htmlBody . '
+              ' . $loginViewHTML . '
               
-              ' . $dtv->show() . '
+              ' . $dateTimeView->renderDateTimeString() . '
           </div>
          </body>
       </html>
